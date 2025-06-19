@@ -1,8 +1,11 @@
 const express = require("express") ;
 const mongoose = require("mongoose");
+const cors = require("cors");
+
 const app = express();
 const PORT = 3000 ;
 app.use(express.json());
+app.use(cors());
 const { createTodo , updateTodo } = require("./types");
 const {Todos} = require("./ds");
 /* 
@@ -15,6 +18,7 @@ description
 app.post("/todos",async (req,res)=>{
     const createPayload = req.body ;
     const parsePayload = createTodo.safeParse(createPayload);
+    console.log(parsePayload);
     if(!parsePayload.success){
         res.status(400).json({
             msg : "You sent the wrong input"

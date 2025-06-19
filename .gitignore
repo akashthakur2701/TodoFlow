@@ -8,5 +8,7 @@
 *.log
 
 # environment variables
-.env.local
+.env
 .env.*
+/backend/.env
+/backend/.env.*
