@@ -1,9 +1,10 @@
 const express = require("express") ;
+const mongoose = require("mongoose");
 const app = express();
 const PORT = 3000 ;
 app.use(express.json());
 const { createTodo , updateTodo } = require("./types");
-const {Todo} = require("./ds");
+const {Todos} = require("./ds");
 /* 
 body{
 title : 
@@ -15,14 +16,15 @@ app.post("/todos",async (req,res)=>{
     const createPayload = req.body ;
     const parsePayload = createTodo.safeParse(createPayload);
     if(!parsePayload.success){
-        res.status(411).json({
+        res.status(400).json({
             msg : "You sent the wrong input"
         })
         return ;
     }
 
     // input in mongodB
-    await Todo.create({
+   try {
+     await Todos.create({
        title : createPayload.title ,
        description : createPayload.description,
        completed : false
@@ -31,9 +33,15 @@ app.post("/todos",async (req,res)=>{
     res.json({
         msg : "Todo created"
     })
+   }catch(err){
+     res.status(501).json({
+        msg : "error in creating",
+        err : err.message
+    })
+   }
 })
 app.get("/todos", async (req,res)=>{
-    const todos = await Todo.find({});
+    const todos = await Todos.find({});
 
     res.json({
         todos
@@ -50,11 +58,10 @@ app.put("/completed",async (req,res)=>{
         })
         return ;
     }
- await Todo.update({
-    _id : req.body.id 
- },{
-    completed : true 
- })
+    if (!mongoose.Types.ObjectId.isValid(req.body.id)) {
+    return res.status(400).json({ msg: "Invalid ID format" });
+}
+ await Todos.findByIdAndUpdate(req.body.id, { completed: true });
 res.json({
     msg: "Todo is updated"
 })
@@ -62,5 +69,5 @@ res.json({
 })
 
 app.listen(PORT,()=>{
-  console.log(`backend is running on port ${port}`)
+  console.log(`backend is running on port ${PORT}`)
 })
