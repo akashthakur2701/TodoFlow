@@ -5,10 +5,15 @@ description : string ,
 completed : boolean
 }
 */
-
+require("dotenv").config(); 
 const mongoose = require("mongoose");
+const mongoURI = process.env.MONGODB_URI;
+if (!mongoURI) {
+  console.error("MONGODB_URI not found in .env");
+  process.exit(1);
+}
 try{
-    mongoose.connect("mongodb+srv://csaiml22104:huihui69@trial.8kxh5.mongodb.net/?retryWrites=true&w=majority&appName=trial");
+    mongoose.connect(mongoURI);
     console.log("connected to mongodb");
 }catch(err){
    console.log("error in connecting to db");
