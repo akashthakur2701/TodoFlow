@@ -1,0 +1,15 @@
+{
+  "name": "todo-backend",
+  "version": "1.0.0",
+  "description": "This is going to be a simple todo app",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Akash",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^5.1.0",
+    "zod": "^3.25.67"
+  }
+}
